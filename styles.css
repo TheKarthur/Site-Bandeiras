@@ -1,0 +1,181 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #222;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Adiciona altura total da tela ao corpo */
+}
+
+#game-container {
+    width: 100%; /* Faz com que o contêiner ocupe 100% da largura da tela */
+    max-width: 800px;
+    height: auto;
+    margin: 20px auto;  
+    text-align: center;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    box-sizing: border-box; /* Considera padding e borda no cálculo de largura */
+}
+
+#country {
+    min-height: 300px; 
+    width: auto; 
+}
+
+#restart-button{
+    visibility: hidden;
+}
+
+#restart-button.active {
+    visibility: visible;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#country-image {
+    /*border: 2px solid #fff;*/
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    transition: clip-path 0.5s ease-in-out;
+}
+
+#guess-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1; /* Define a ordem da pilha para o contêiner de palpites */
+}
+
+#country-guess {
+    padding: 10px;
+    font-size: 16px;
+}
+
+#countries{
+    font-family: Arial, sans-serif;
+    color: #ff0000;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    width: 200px;
+}
+
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#feedback-container {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 18px;
+    opacity: 0;
+}
+
+#feedback-container.active {
+    opacity: 1;
+}
+
+#feedback-container.correct {
+    background-color: #2ecc71; /* Verde para resposta correta */
+    color: #fff;
+}
+
+#feedback-container.incorrect {
+    background-color: #e74c3c; /* Vermelho para resposta incorreta */
+    color: #fff;
+}
+
+#chances-icons img {
+    width: 100px; /* Substitua pelo tamanho desejado */
+    height: auto; /* Isso mantém a proporção da imagem */
+    /* Adicione outros estilos conforme necessário */
+}
+#feedback-container.incorrect {
+    background-color: #e74c3c; /* Vermelho para resposta incorreta */
+    color: #fff;
+}
+
+#countries-list {
+    max-height: 200px; /* Altura máxima da lista */
+    overflow-y: auto; /* Adiciona um scrollbar vertical se a altura ultrapassar a altura máxima */
+    margin-top: 70px; /* Espaçamento acima da lista */
+    position: absolute; /* Posição absoluta para sobrepor outros elementos */
+    z-index: 2; /* Coloca a lista de países acima do contêiner de palpites */
+}
+
+#countries-list::-webkit-scrollbar {
+    width: 10px; /* Largura da scrollbar */
+}
+
+#countries-list::-webkit-scrollbar-thumb {
+    background-color: #808080; /* Cor do 'pulgar' (thumb) da scrollbar */
+    border-radius: 10px; /* Cantos arredondados do 'pulgar' (thumb) */
+}
+
+#countries-list::-webkit-scrollbar-track {
+    background-color: #f0f0f0; /* Cor da faixa da scrollbar */
+    border-radius: 10px; /* Cantos arredondados da faixa da scrollbar */
+}
+
+
+/* Estilo para cada país na lista */
+#countries-list div {
+    color: #ffffff;
+    background-color: #222; /* Cor de fundo */
+    padding: 16px; /* Preenchimento interno */
+    /*margin-bottom: 5px;  Espaçamento entre países */
+    /*border-radius: 5px;  Cantos arredondados */
+    cursor: pointer; /* Cursor ao passar por cima */
+    transition: background-color 0.3s; /* Efeito de transição de cor de fundo */
+    width: 480px;
+}
+
+/* Estilo ao passar o mouse sobre cada país */
+#countries-list div:hover {
+    background-color: #141c24; /* Cor de fundo alterada ao passar o mouse */
+}
+
+#countries-list div.focused {
+    background-color: #141c24; /* Cor de fundo alterada ao passar o mouse */
+}
+
+#custom-image {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    width: 72px; /* Ajuste conforme necessário */
+    height: 72px; /* Ajuste conforme necessário */
+    cursor: pointer;
+}
+
+#countries-list div.selected {
+    background-color: #141c24;
+    font-weight: bold; /* Texto em negrito para destacar a seleção */
+    cursor: pointer; /* Mostra a seta de cursor para indicar que é clicável */
+}
+
+#guessed-countries div {
+    margin-top: 20px;
+}
+
+
