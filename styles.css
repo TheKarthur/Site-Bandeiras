@@ -5,6 +5,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh; /* Adiciona altura total da tela ao corpo */
+    overflow-y: hidden;
 }
 
 #game-container {
@@ -21,8 +22,8 @@ body {
 }
 
 #country {
-    min-height: 300px; 
-    width: auto; 
+    width: auto;
+    min-height: 250px; 
 }
 
 #restart-button{
@@ -47,6 +48,8 @@ body {
     /*border: 2px solid #fff;*/
     clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
     transition: clip-path 0.5s ease-in-out;
+    user-select: none;
+    pointer-events: none;
 }
 
 #guess-container {
@@ -108,8 +111,8 @@ button {
 #chances-icons img {
     width: 100px; /* Substitua pelo tamanho desejado */
     height: auto; /* Isso mantém a proporção da imagem */
-    /* Adicione outros estilos conforme necessário */
 }
+
 #feedback-container.incorrect {
     background-color: #e74c3c; /* Vermelho para resposta incorreta */
     color: #fff;
@@ -159,15 +162,6 @@ button {
     background-color: #141c24; /* Cor de fundo alterada ao passar o mouse */
 }
 
-#custom-image {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    width: 72px; /* Ajuste conforme necessário */
-    height: 72px; /* Ajuste conforme necessário */
-    cursor: pointer;
-}
-
 #countries-list div.selected {
     background-color: #141c24;
     font-weight: bold; /* Texto em negrito para destacar a seleção */
@@ -178,4 +172,24 @@ button {
     margin-top: 20px;
 }
 
+@media only screen and (pointer: coarse) {
 
+    #game-container {
+        width: 90vw;
+    }
+
+    #country-image {
+        width: 90%;
+        height: auto;
+    }
+    
+    #chances-icons img {
+        width: 10vw; /* Substitua pelo tamanho desejado */
+        height: auto; /* Isso mantém a proporção da imagem */
+    }
+
+    #country{
+        height: 30vh;
+    }
+
+}

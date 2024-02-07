@@ -8,10 +8,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <a href="https://www.linkedin.com/in/arthur-padilha/" target="_blank">
-        <img src="LinkedIn_icon.png" alt="Imagem PNG" id="custom-image">
-    </a>
-
     <div id="game-container">
         <div id="country">
             <img id="country-image" alt="Imagem do País">
@@ -29,6 +25,10 @@
         </div>
     </div>
     <button id="restart-button" onclick="restartGame();">Recomeçar</button>
+
+    <img src="" alt="" id= "teste">
+
+
     <script src="script.js"></script>
 </body>
 </html>

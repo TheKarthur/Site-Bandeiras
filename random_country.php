@@ -203,7 +203,8 @@ $randomCountry = $countries[$randomIndex];
 // Montar um array com os dados que você deseja enviar
 $responseData = [
     "name" => $randomCountry['name'],
-    "flag" => $randomCountry['flag']
+    "flag" => $randomCountry['flag'],
+    "country_image" => "flags/" . $randomCountry["flag"] . ".png"
 ];
 
 // Retornar o array como JSON

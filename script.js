@@ -13,6 +13,7 @@ let chances = 5;
 let percentageRevealed = 0;
 let currentCountry;
 let countriesData;
+let countriesData_aux;
 
 // Função para remover acentos de uma string
 function removeAccents(str) {
@@ -61,21 +62,20 @@ async function chooseRandomCountry() {
         const countryImage = document.getElementById('country-image');
 
         // Atualize o src da imagem com a URL correta
-        countryImage.src = `country_image.php?flag=${data.flag}`;
+        countryImage.src = data.country_image;
 
         currentCountry = data;
         document.getElementById('country-guess').focus();
     } catch (error) {
         console.error('Erro ao buscar país aleatório:', error);
     }
-
-    revealImage();
     updateChances();
 }
 
 
 // Função para reiniciar o jogo
 function restartGame() {
+    countriesData = countriesData_aux;
     const restartButton = document.getElementById('restart-button');
     const image = document.getElementById('country-image');
     const feedbackContainer = document.getElementById('feedback-container');
@@ -100,13 +100,25 @@ function restartGame() {
 function revealImage() {
     const image = document.getElementById('country-image');
     const feedbackContainer = document.getElementById('feedback-container');
+    const testImage = document.getElementById('teste');
+    const guessInput = document.getElementById('country-guess');
 
     percentageRevealed += 20;
     percentageRevealed = Math.min(percentageRevealed, 100);
 
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    
+    canvas.width = image.width;
+    canvas.height = image.height * (percentageRevealed/100);
+
+    context.drawImage(image, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+    
+    testImage.src = canvas.toDataURL('image/png');
+    
     image.style.clipPath = `polygon(0 0, 100% 0, 100% ${percentageRevealed}%, 0 ${percentageRevealed}%)`;
 
-    const isCorrectGuess = attempts > 0 && removeAccents(currentCountry.name.toLowerCase()) === removeAccents(document.getElementById('country-guess').value.toLowerCase());
+    const isCorrectGuess = attempts > 0 && removeAccents(currentCountry.name.toLowerCase()) === removeAccents(guessInput.value.toLowerCase());
 
     if (isCorrectGuess) {
         feedbackContainer.classList.add('correct', 'active');
@@ -131,6 +143,13 @@ function checkGuess() {
     if (!isGuessInCountryList(normalizedGuess)) {
         return;
     }
+
+    const selectedCountry = document.querySelector('.selected');
+    if(selectedCountry){
+        selectedCountry.remove('selected');
+    }
+
+    remove_guessed_country(normalizedGuess);
 
     attempts++;
 
@@ -176,7 +195,6 @@ function checkGuess() {
     }
 }
 
-// Função para verificar se o palpite está na lista de países
 function isGuessInCountryList(guess) {
     const countryList = document.getElementById('countries-list');
 
@@ -188,21 +206,18 @@ function isGuessInCountryList(guess) {
     return false;
 }
 
-// Função de inicialização do jogo
 function initializeGame() {
     chooseRandomCountry();
 
-    // Carrega os dados dos países no início
     fetchCountriesData();
 
-    // Adiciona um ouvinte de eventos para o clique nas divs da lista
     document.getElementById('countries-list').addEventListener('click', function (event) {
         const clickedCountry = event.target.textContent;
         document.getElementById('country-guess').value = clickedCountry;
         checkGuess();
+        document.getElementById('country-guess').focus();
     });
 
-    // Adiciona um ouvinte de eventos para a tecla Enter na input guess
     document.getElementById('country-guess').addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             const selectedCountry = document.querySelector('.selected');
@@ -227,6 +242,7 @@ async function fetchCountriesData() {
     try {
         const response = await fetch('countries.php');
         countriesData = await response.json();
+        countriesData_aux = countriesData;
     } catch (error) {
         console.error('Erro ao buscar lista de países:', error);
     }
@@ -236,39 +252,39 @@ async function updateCountryList() {
     const input = document.getElementById('country-guess');
     const countryList = document.getElementById('countries-list');
 
-    try {
-        const response = await fetch('countries.php');
-        const data = await response.json();
+    await fetch('countries.php'); //não retirar
 
-        // Limpa a lista de países
-        countryList.innerHTML = '';
+    countryList.innerHTML = '';
 
-        const inputValue = removeAccents(input.value.trim().toLowerCase());
+    const inputValue = removeAccents(input.value.trim().toLowerCase());
 
-        // Verifica se há pelo menos uma letra na entrada
-        if (inputValue.length > 0) {
-            // Adicionar opções à lista de países com base no valor digitado
-            for (const country of data) {
-                const countryName = country.name.toLowerCase();
-                const countryNameNoAccents = country.name_no_accents.toLowerCase();
+    // Verifica se há pelo menos uma letra na entrada
+    if (inputValue.length > 0) {
+        // Adicionar opções à lista de países com base no valor digitado
+        for (const country of countriesData) {
+            const countryName = country.name.toLowerCase();
+            const countryNameNoAccents = country.name_no_accents.toLowerCase();
 
-                if (countryName.includes(inputValue) || countryNameNoAccents.includes(inputValue)) {
-                    const option = document.createElement('div');
-                    option.textContent = country.name;  // Exibe o nome com acentos
-                    countryList.appendChild(option);
-                }
+            if (countryName.includes(inputValue) || countryNameNoAccents.includes(inputValue)) {
+                const option = document.createElement('div');
+                option.textContent = country.name;  // Exibe o nome com acentos
+                countryList.appendChild(option);
             }
-
-            // Mostra a lista de países
-            countryList.style.display = 'block';
-        } else {
-            // Esconde a lista de países se não houver texto na entrada
-            countryList.style.display = 'none';
         }
-    } catch (error) {
-        console.error('Erro ao buscar lista de países:', error);
+
+        // Mostra a lista de países
+        countryList.style.display = 'block';
+    } else {
+        // Esconde a lista de países se não houver texto na entrada
+        countryList.style.display = 'none';
     }
 }
+
+function remove_guessed_country(country_name_guessed) {
+    countriesData = countriesData.filter(country => country.name_no_accents.toLowerCase() !== country_name_guessed)
+}
+
+
 
 // Função para lidar com a navegação na lista usando as teclas de seta
 function handleArrowKeys(event) {
